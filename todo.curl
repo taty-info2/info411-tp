@@ -1,0 +1,7 @@
+curl -X POST http://localhost:3001/todo \
+  -i
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Acheter du lait",
+    "description": "Passer au supermarché après le travail"
+}'
