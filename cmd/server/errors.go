@@ -5,7 +5,6 @@ import (
 	"net/http"
 )
 
-// -------------JSON-------------
 func (app *application) logError(r *http.Request, err error) {
 	var (
 		method = r.Method
@@ -16,7 +15,7 @@ func (app *application) logError(r *http.Request, err error) {
 }
 
 func (app *application) errorResponse(w http.ResponseWriter, r *http.Request, status int, message any) {
-	env := Envelope{"error": message}
+	env := NewEnvelopeWithError(nil, nil, Fail, message)
 
 	err := WriteJSON(w, status, env, nil)
 	if err != nil {

@@ -1,7 +1,7 @@
 package info411
 
 type Todo struct {
-	Id          int
+	Id          int64
 	Title       string
 	Description string
 	Completed   bool

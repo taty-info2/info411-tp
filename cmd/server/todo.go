@@ -10,8 +10,10 @@ import (
 
 type todoRepo interface {
 	List() ([]info411.Todo, error)
-	FindById(int) (info411.Todo, error)
+	FindById(int64) (info411.Todo, error)
 	Insert(*info411.Todo) error
+	Delete(int64) error
+	Complete(int64, bool) error
 }
 
 func (a *application) handleGetTodos(w http.ResponseWriter, r *http.Request) {
@@ -20,7 +22,10 @@ func (a *application) handleGetTodos(w http.ResponseWriter, r *http.Request) {
 		a.serverErrorResponse(w, r, err)
 	}
 
-	WriteJSON(w, http.StatusOK, Envelope{"todos": todos}, nil)
+	err = WriteJSON(w, http.StatusOK, NewEnvelope(makeTodosForGetTodosFromModels(todos), nil, Success), nil)
+	if err != nil {
+		a.serverErrorResponse(w, r, err)
+	}
 }
 
 func (a *application) handleGetTodoById(w http.ResponseWriter, r *http.Request) {
@@ -29,35 +34,14 @@ func (a *application) handleGetTodoById(w http.ResponseWriter, r *http.Request) 
 		a.serverErrorResponse(w, r, err)
 	}
 
-	todos, err := a.todoRepo.FindById(int(id))
+	todo, err := a.todoRepo.FindById(id)
 	if err != nil {
 		a.serverErrorResponse(w, r, err)
 	}
 
-	WriteJSON(w, http.StatusOK, Envelope{"todos": todos}, nil)
-}
-
-type todoForCreate struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	FieldErrors map[string][]string
-}
-
-func (t *todoForCreate) Validate(v *validator.Validator) {
-	v.Check(!validator.IsZero(t.Title), "Title", "Todo must have a title")
-	v.Check(!validator.IsZero(t.Description), "Description", "Todo must have a description")
-
-	if !v.Valid() {
-		t.FieldErrors = v.Errors
-	}
-}
-
-func (t *todoForCreate) toModel() info411.Todo {
-	return info411.Todo{
-		Id:          0,
-		Title:       t.Title,
-		Description: t.Description,
-		Completed:   false,
+	err = WriteJSON(w, http.StatusOK, NewEnvelope(makeTodoForGetTodoByIdFromModel(todo), nil, Success), nil)
+	if err != nil {
+		a.serverErrorResponse(w, r, err)
 	}
 }
 
@@ -82,7 +66,52 @@ func (a *application) handlePostTodo(w http.ResponseWriter, r *http.Request) {
 	headers := make(http.Header)
 	headers.Set("Location", fmt.Sprintf("/todo/%d", todo.Id))
 
-	err = WriteJSON(w, http.StatusCreated, Envelope{"todo": todo}, headers)
+	err = WriteJSON(w, http.StatusCreated, NewEnvelope(makeTodoForGetTodoByIdFromModel(todo), nil, Success), headers)
+	if err != nil {
+		a.serverErrorResponse(w, r, err)
+	}
+}
+
+func (a *application) handleDeleteTodo(w http.ResponseWriter, r *http.Request) {
+	id, err := ReadIDParam(r)
+	if err != nil {
+		a.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = a.todoRepo.Delete(id)
+	if err != nil {
+		a.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = WriteJSON(w, http.StatusOK, NewEnvelope(nil, nil, Success), nil)
+	if err != nil {
+		a.serverErrorResponse(w, r, err)
+	}
+}
+
+func (a *application) handleCompleteTodo(w http.ResponseWriter, r *http.Request) {
+	id, err := ReadIDParam(r)
+	if err != nil {
+		a.serverErrorResponse(w, r, err)
+		return
+	}
+
+	var u todoUpdate
+	err = ReadJSON(w, r, &u)
+	if err != nil {
+		a.badRequestResponse(w, r, err)
+		return
+	}
+
+	err = a.todoRepo.Complete(id, u.Completed)
+	if err != nil {
+		a.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = WriteJSON(w, http.StatusOK, NewEnvelope(nil, nil, Success), nil)
 	if err != nil {
 		a.serverErrorResponse(w, r, err)
 	}

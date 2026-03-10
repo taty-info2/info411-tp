@@ -1,3 +1,5 @@
+curl -i http://localhost:3001/todo \
+
 curl -X POST http://localhost:3001/todo \
   -i
   -H "Content-Type: application/json" \
@@ -5,3 +7,12 @@ curl -X POST http://localhost:3001/todo \
     "title": "Acheter du lait",
     "description": "Passer au supermarché après le travail"
 }'
+
+curl -X PATCH http://localhost:3001/todo/4 \
+  -i
+  -H "Content-Type: application/json" \
+  -d '{
+    "completed": false
+}'
+
+curl -i -X DELETE http://localhost:3001/todo/2 \

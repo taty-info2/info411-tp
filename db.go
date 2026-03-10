@@ -7,6 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// Return a db pool
 func Open(dbUser, dbPassword, dbHost, dbName string) (*sql.DB, error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s",
 		dbUser,

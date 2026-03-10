@@ -3,12 +3,10 @@ package main
 import (
 	"database/sql"
 	"flag"
-	"fmt"
 	"log/slog"
-	"net/http"
 	"os"
 
-	"github.com/masar3141/tp-info411"
+	info411 "github.com/masar3141/tp-info411"
 	"github.com/masar3141/tp-info411/repo"
 )
 
@@ -42,7 +40,7 @@ func main() {
 
 	db, err := info411.Open(cfg.dbUser, cfg.dbPassword, cfg.dbHost, cfg.dbName)
 	if err != nil {
-		logger.Error("Error opening database pool", "error", err.Error())
+		logger.Error("Error opening database connection", "error", err.Error())
 		os.Exit(1)
 	}
 	defer db.Close()
@@ -53,14 +51,4 @@ func main() {
 		logger.Error("Server crashed", "error", err.Error())
 		os.Exit(1)
 	}
-}
-
-func (a *application) serve() error {
-	srv := http.Server{
-		Addr:    fmt.Sprintf(":%s", a.cfg.webPort),
-		Handler: a.routes(),
-	}
-
-	a.logger.Info("running server:", "port", a.cfg.webPort)
-	return srv.ListenAndServe()
 }
