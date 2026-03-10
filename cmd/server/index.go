@@ -8,9 +8,8 @@ import (
 )
 
 func (a *application) handleGetIndex(w http.ResponseWriter, r *http.Request) {
-	path := filepath.Join(a.cfg.tplDir, "index.html")
-	tpl, err := template.ParseFiles(path)
-	fmt.Println(path)
+	tpl, err := template.ParseFiles(filepath.Join(a.cfg.tplDir, "index.html"))
+	fmt.Println()
 	if err != nil {
 		a.logger.Error("Can't create template hello", "error", err.Error())
 	}
