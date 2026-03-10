@@ -16,9 +16,6 @@ func (a *application) routes() http.Handler {
 	// ---------- Ping ----------
 	mux.HandleFunc("GET /ping", a.handleGetPing)
 
-	// ---------- Index ----------
-	mux.HandleFunc("GET /index", a.handleGetIndex)
-
 	// ---------- Todo ----------
 	mux.HandleFunc("GET /todo", a.handleGetTodos)
 	mux.HandleFunc("GET /todo/{id}", a.handleGetTodoById)
