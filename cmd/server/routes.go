@@ -10,7 +10,7 @@ func (a *application) routes() http.Handler {
 	mux := http.NewServeMux()
 
 	// ---------- File Server ----------
-	fileServer := http.FileServer(neuteredFileSystem{http.Dir(a.cfg.tplDir)})
+	fileServer := http.FileServer(neuteredFileSystem{http.Dir(a.c.tplDir)})
 	mux.Handle("GET /", fileServer)
 
 	// ---------- Ping ----------
@@ -58,10 +58,10 @@ func (nfs neuteredFileSystem) Open(path string) (http.File, error) {
 
 func (a *application) serve() error {
 	srv := http.Server{
-		Addr:    fmt.Sprintf(":%s", a.cfg.webPort),
+		Addr:    fmt.Sprintf(":%s", a.c.webPort),
 		Handler: a.routes(),
 	}
 
-	a.logger.Info("running server:", "port", a.cfg.webPort)
+	a.logger.Info("running server:", "port", a.c.webPort)
 	return srv.ListenAndServe()
 }

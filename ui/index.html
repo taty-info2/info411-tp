@@ -3,10 +3,40 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="style.css">
 		<title>Info411</title>
 	</head>
 	<body>
-		<h1>Todos</h1>
+		<button id="formToggleBtn">+ Todo</button>
+
+		<template id="form-todo">
+			<dialog data-root closedby="any">
+				<form>
+					<label for="title">Title</label>
+					<input data-title name="title" id="title">
+
+					<label for="description">Description</label>
+					<input data-title name="description" id="description">
+
+					<button type="submit">Create</button>
+				</form>
+			</dialog>
+		</template>
+
+		<template id="todo-list">
+			<ol data-root>
+			</ol>
+		</template>
+
+		<template id="todo-in-list">
+			<div data-root>
+				<h2 data-title></h2>
+				<p data-description></p>
+				<input data-completed type="checkbox">
+				<button data-delete>X</button>
+			</div>
+		</template>
+
 		<script type="module" src="/src/main.js"></script>
 	</body>
 </html>

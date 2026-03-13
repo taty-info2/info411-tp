@@ -1,10 +1,7 @@
-import { Todos } from './todo.js';
-import { TodosList } from './todo_vues.js';
+import { App } from './vues/app.js';
+import { AppState } from './models/app.js';
 
-export const API_BASE_URL = "http://localhost:3001";
+const appState = new AppState();
+await appState.init(); // load the todos
 
-const todos = new Todos();
-await todos.getAll();
-const todosList = new TodosList(todos);
-
-document.body.append(todosList.el);
+new App(appState);

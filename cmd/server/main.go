@@ -11,7 +11,7 @@ import (
 )
 
 type application struct {
-	cfg    config
+	c      config
 	logger *slog.Logger
 	db     *sql.DB
 
@@ -19,36 +19,34 @@ type application struct {
 }
 
 type config struct {
-	dbUser, dbPassword, dbHost, dbName string
-	webPort                            string
-	tplDir                             string
+	*info411.DbFlags
+	webPort string
+	tplDir  string
 }
 
 func main() {
 	var cfg config
-	flag.StringVar(&cfg.dbUser, "db-user", "", "database user")
-	flag.StringVar(&cfg.dbPassword, "db-password", "", "database password")
-	flag.StringVar(&cfg.dbHost, "db-host", "", "database password")
-	flag.StringVar(&cfg.dbName, "db-name", "", "database name")
-
 	flag.StringVar(&cfg.webPort, "web-port", "3001", "server port")
-
 	flag.StringVar(&cfg.tplDir, "tpl-dir", "", "directory where html is stored")
+	cfg.DbFlags = info411.GetDbFlags()
 	flag.Parse()
 
-	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	l := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	app := application{c: cfg, logger: l}
 
-	db, err := info411.Open(cfg.dbUser, cfg.dbPassword, cfg.dbHost, cfg.dbName)
+	dbConn, err := info411.Open(app.c.DbUser, app.c.DbPassword, app.c.DbHost, app.c.DbName)
 	if err != nil {
-		logger.Error("Error opening database connection", "error", err.Error())
+		l.Error("Error opening database connection", "error", err.Error())
 		os.Exit(1)
 	}
-	defer db.Close()
+	defer dbConn.Close()
 
-	a := application{cfg, logger, db, repo.NewTodoRepoMock()}
+	app.db = dbConn
+	app.todoRepo = repo.NewTodoRepoMariaDB(app.db)
+	// app.todoRepo = repo.NewTodoRepoInMem()
 
-	if err = a.serve(); err != nil {
-		logger.Error("Server crashed", "error", err.Error())
+	if err = app.serve(); err != nil {
+		l.Error("Server crashed", "error", err.Error())
 		os.Exit(1)
 	}
 }

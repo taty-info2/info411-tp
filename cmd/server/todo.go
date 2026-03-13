@@ -20,6 +20,7 @@ func (a *application) handleGetTodos(w http.ResponseWriter, r *http.Request) {
 	todos, err := a.todoRepo.List()
 	if err != nil {
 		a.serverErrorResponse(w, r, err)
+		return
 	}
 
 	err = WriteJSON(w, http.StatusOK, NewEnvelope(makeTodosForGetTodosFromModels(todos), nil, Success), nil)
@@ -32,11 +33,13 @@ func (a *application) handleGetTodoById(w http.ResponseWriter, r *http.Request) 
 	id, err := ReadIDParam(r)
 	if err != nil {
 		a.serverErrorResponse(w, r, err)
+		return
 	}
 
 	todo, err := a.todoRepo.FindById(id)
 	if err != nil {
 		a.serverErrorResponse(w, r, err)
+		return
 	}
 
 	err = WriteJSON(w, http.StatusOK, NewEnvelope(makeTodoForGetTodoByIdFromModel(todo), nil, Success), nil)
@@ -55,7 +58,7 @@ func (a *application) handlePostTodo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	v := validator.New()
-	if tfc.Validate(v); !v.Valid() {
+	if ValidateTodoForCreate(v, tfc); !v.Valid() {
 		a.failedValidationResponse(w, r, tfc.FieldErrors)
 		return
 	}

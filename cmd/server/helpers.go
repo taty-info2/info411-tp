@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 )
@@ -118,4 +119,11 @@ func ReadIDParam(r *http.Request) (int64, error) {
 	}
 
 	return id, nil
+}
+
+// Gets the query value for the given key. Returns the empty string if no values found
+// Fails on url.ParseQuery
+func GetQueryVal(r *http.Request, key string) (string, error) {
+	p, err := url.ParseQuery(r.URL.RawQuery)
+	return p.Get(key), err
 }

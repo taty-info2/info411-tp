@@ -54,9 +54,8 @@ type todoForCreate struct {
 	FieldErrors map[string][]string
 }
 
-func (t *todoForCreate) Validate(v *validator.Validator) {
-	v.Check(!validator.IsZero(t.Title), "Title", "Todo must have a title")
-	v.Check(!validator.IsZero(t.Description), "Description", "Todo must have a description")
+func ValidateTodoForCreate(v *validator.Validator, t todoForCreate) {
+	v.Check(!validator.IsZero(t.Title), "title", "Todo must have a title")
 
 	if !v.Valid() {
 		t.FieldErrors = v.Errors
