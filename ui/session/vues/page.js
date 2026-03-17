@@ -1,4 +1,5 @@
 import { PageState } from '../page.js';
+import { Query } from './query.js';
 import { SessionList } from './sessionList.js';
 
 export class Page {
@@ -18,6 +19,7 @@ export class Page {
 
     #init() {
         this.#el = document.querySelector("body");
+        this.#el.appendChild(new Query().el);
         this.#el.appendChild(new SessionList(this.#pageState.sessions).el);
     }
 }

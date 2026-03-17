@@ -3,23 +3,58 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 		<link rel="stylesheet" type="text/css" href="/style.css">
+		<link rel="stylesheet" type="text/css" href="./style.css">
+
+        <link href="https://cdn.jsdelivr.net/npm/beercss@4.0.19/dist/cdn/beer.min.css" rel="stylesheet" >
+        <script type="module" src="https://cdn.jsdelivr.net/npm/beercss@4.0.19/dist/cdn/beer.min.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/material-dynamic-colors@1.1.4/dist/cdn/material-dynamic-colors.min.js"></script>
+
 		<title>Info411</title>
 	</head>
 	<body>
+        <template id="queries">
+            <form action="/session">
+                <nav class="group connected">
+                    <label class="border left-round radio">
+                        <input type="radio" name="sort" value="date">
+                        <span>Date</span>
+                    </label>
+
+                    <label class="border no-round radio">
+                        <input type="radio" name="sort" value="nom">
+                        <span>Nom</span>
+                    </label>
+
+                    <label class="border no-round radio">
+                        <input type="radio" name="sort" value="place">
+                        <span>Place</span>
+                    </label>
+
+                    <button class="border right-round" >
+                        <i>search</i>
+                    </button>
+
+                </nav>
+            </form>
+        </template>
+
 		<template id="session-list">
-			<ol>
-			</ol>
+			<ul class="list border">
+			</ul>
 		</template>
 
 		<template id="session-in-list">
-			<div>
-				<h2 data-titre></h2>
-				<p data-date></p>
-				<p data-heure></p>
-				<p data-adresse></p>
-				<img data-image></img>
-			</div>
+            <li>
+                <img class="round extra" data-image></img>
+                <div class="max">
+                    <h5 class="small" data-titre></h5>
+                    <div data-date></div>
+                    <div data-heure></div>
+                    <div data-adresse></div>
+                </div>
+            </li>
 		</template>
 
 		<script type="module" src="./main.js"></script>

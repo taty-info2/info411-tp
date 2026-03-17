@@ -32,7 +32,7 @@ export class SessionList {
      * */
     #render(sessions) {
         this.#el.replaceChildren(
-            ...sessions.map(session => document.createElement("li").appendChild(new SessionInList(session).el))
+            ...sessions.map(session => new SessionInList(session).el)
         );
     }
 

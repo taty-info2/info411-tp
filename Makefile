@@ -1,9 +1,5 @@
 include .env
 
-CONTAINER:=podman 
-MARIADB_CONTAINER_NAME:=mariadb_info411
-SQL_FOLDER:=./sql
-
 ########################################
 ###                SRV               ###
 ########################################
