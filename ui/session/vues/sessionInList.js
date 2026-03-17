@@ -28,6 +28,6 @@ export class SessionInList {
         this.#el.querySelector("[data-date]").innerText = this.#session.date;
         this.#el.querySelector("[data-heure]").innerText = `${this.#session.heure_debut}-${this.#session.heure_fin}`;
         this.#el.querySelector("[data-adresse]").innerText = this.#session.adresse;
-        this.#el.querySelector("[data-image]").innerText = this.#session.activiteImgUrl;
+        this.#el.querySelector("[data-image]").src = this.#session.activiteImgUrl;
     }
 }
