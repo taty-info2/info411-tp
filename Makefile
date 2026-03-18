@@ -29,6 +29,7 @@ db/create:
 		-e MARIADB_USER=$(DB_USER) \
 		-e MARIADB_PASSWORD=$(DB_PW) \
 		-p 3306:3306 \
+		-v ./bd_data:/var/lib/mysql \
 		docker.io/library/mariadb:latest
 
 db/start:
