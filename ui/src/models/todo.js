@@ -43,7 +43,7 @@ export class Todo extends Observable {
      * @param {()=>void} onDelete
      * */
     constructor(id, title, description, completed) {
-        super(new PubSub());
+        super();
         this.id = id;
         this.title = title;
         this.description = description;

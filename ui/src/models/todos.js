@@ -25,11 +25,8 @@ export class Todos extends Observable {
         this.fireEvent(EVT_TODOS_CHANGE, null, this.todos);
     };
 
-    /**  
-     * @param {PubSub} pcs
-     * */
     constructor() {
-        super(new PubSub());
+        super();
         this.#todos = [];
     }
 

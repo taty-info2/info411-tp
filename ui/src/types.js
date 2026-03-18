@@ -67,11 +67,8 @@ export class Observable {
     /**  @type PubSub */
     #pcs;
 
-    /**  
-     * @param {PubSub} pcs
-     * */
-    constructor(pcs) {
-        this.#pcs = pcs;
+    constructor() {
+        this.#pcs = new PubSub();
     }
 
     /**

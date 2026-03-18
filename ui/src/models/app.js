@@ -29,7 +29,7 @@ export class AppState extends Observable {
     get todos() { return this.#todos };
 
     constructor() {
-        super(new PubSub());
+        super();
     }
 
     // To call in main
