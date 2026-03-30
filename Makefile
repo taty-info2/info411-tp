@@ -12,7 +12,7 @@ srv/build:
 	@go build  -o=./tmp/server ./cmd/server
 
 srv/run: srv/build
-	@./tmp/server -db-user=$(DB_USER) -db-password=$(DB_PW) -db-name=$(DB_NAME) -db-host=$(DB_HOST) -web-port=$(WEB_PORT) -tpl-dir=$(TPL_DIR)
+	@./tmp/server
 
 compile/win:
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o=./tmp/server.exe ./cmd/server
@@ -29,7 +29,7 @@ db/create:
 		-e MARIADB_USER=$(DB_USER) \
 		-e MARIADB_PASSWORD=$(DB_PW) \
 		-p 3306:3306 \
-		-v ./bd_data:/var/lib/mysql \
+		-v ./bd_data:/var/lib/mysql/ \
 		docker.io/library/mariadb:latest
 
 db/start:

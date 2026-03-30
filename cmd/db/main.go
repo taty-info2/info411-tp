@@ -16,7 +16,7 @@ type app struct {
 }
 
 type config struct {
-	*info411.DbFlags
+	*info411.DbEnv
 	sqlDir string
 	cmd    string // either up or down
 }
@@ -27,7 +27,7 @@ func main() {
 	var cfg config
 	flag.StringVar(&cfg.sqlDir, "sql-dir", "", "directory where sql is stored")
 	flag.StringVar(&cfg.cmd, "cmd", "", "sql command to execute: up or down")
-	cfg.DbFlags = info411.GetDbFlags()
+	cfg.DbEnv = info411.GetDbEnv()
 	flag.Parse()
 
 	db, err := info411.Open(cfg.DbUser, cfg.DbPassword, cfg.DbHost, cfg.DbName)

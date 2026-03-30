@@ -3,8 +3,8 @@ package info411
 
 import (
 	"database/sql"
-	"flag"
 	"fmt"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -27,16 +27,15 @@ func Open(dbUser, dbPassword, dbHost, dbName string) (*sql.DB, error) {
 	return db, nil
 }
 
-type DbFlags struct {
+type DbEnv struct {
 	DbUser, DbPassword, DbHost, DbName string
 }
 
-func GetDbFlags() *DbFlags {
-	var dbf DbFlags
-	flag.StringVar(&dbf.DbUser, "db-user", "", "database user")
-	flag.StringVar(&dbf.DbPassword, "db-password", "", "database password")
-	flag.StringVar(&dbf.DbHost, "db-host", "", "database password")
-	flag.StringVar(&dbf.DbName, "db-name", "", "database name")
-
-	return &dbf
+func GetDbEnv() DbEnv {
+	var dbf DbEnv
+	dbf.DbUser = os.Getenv("DB_USER")
+	dbf.DbPassword = os.Getenv("DB_PASSWORD")
+	dbf.DbHost = os.Getenv("DB_HOST")
+	dbf.DbName = os.Getenv("DB_NAME")
+	return dbf
 }

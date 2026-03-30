@@ -1,0 +1,6 @@
+bd_data
+tmp
+.git
+.gitignore
+todo.curl
+Makefile

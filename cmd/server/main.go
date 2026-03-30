@@ -2,7 +2,7 @@ package main
 
 import (
 	"database/sql"
-	"flag"
+	"fmt"
 	"log/slog"
 	"os"
 
@@ -19,17 +19,18 @@ type application struct {
 }
 
 type config struct {
-	*info411.DbFlags
+	info411.DbEnv
 	webPort string
 	tplDir  string
 }
 
 func main() {
 	var cfg config
-	flag.StringVar(&cfg.webPort, "web-port", "3001", "server port")
-	flag.StringVar(&cfg.tplDir, "tpl-dir", "", "directory where html is stored")
-	cfg.DbFlags = info411.GetDbFlags()
-	flag.Parse()
+	cfg.webPort = os.Getenv("WEB_PORT")
+	cfg.tplDir = os.Getenv("TPL_DIR")
+	cfg.DbEnv = info411.GetDbEnv()
+
+	fmt.Printf("%+v", cfg)
 
 	l := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	app := application{c: cfg, logger: l}
@@ -45,7 +46,7 @@ func main() {
 	app.todoRepo = repo.NewTodoRepoMariaDB(app.db)
 	// app.todoRepo = repo.NewTodoRepoInMem()
 
-	if err = app.serve(); err != nil {
+	if err := app.serve(); err != nil {
 		l.Error("Server crashed", "error", err.Error())
 		os.Exit(1)
 	}
