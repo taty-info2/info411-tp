@@ -4,6 +4,8 @@ CONTAINER:=podman
 MARIADB_CONTAINER_NAME:=mariadb_info411
 SQL_FOLDER:=./sql
 
+ZIP_NAME := TP1_SCHMITT_GIMBERT.zip
+
 ########################################
 ###                SRV               ###
 ########################################
@@ -59,3 +61,6 @@ db/seed: db/build
 	@./tmp/db -db-user=$(DB_USER) -db-password=$(DB_PW) -db-name=$(DB_NAME) -db-host=$(DB_HOST) -sql-dir=$(SQL_DIR) -cmd=seed
 
 db/reset: db/down db/up db/seed
+
+zip: 
+	zip -r ../$(ZIP_NAME) . -x ".git/*"

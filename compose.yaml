@@ -4,7 +4,7 @@ services:
     srv-v3:
         container_name: server_info411
         # Je prefix avec docker.io parce que podman ne résout pas tout seul
-        image: docker.io/masar314/app-multiplatform
+        image: info411/server
         ports:
             - ${WEB_PORT}:3001
         # env_file:
@@ -19,8 +19,8 @@ services:
           - SQL_DIR=./${SQL_DIR}
     mariadb:
         container_name: mariadb_info411
-        image: docker.io/masar314/mariadb
-        # image: mariadb
+        # image: docker.io/masar314/mariadb
+        image: info411/bdd
         # restart: always -> si crash, restart le container
         # image: mariadb sans slash -> soit image locale soit image officielle. Sinon login_docker_hub/nom_image
         environment:
@@ -30,6 +30,6 @@ services:
             - MARIADB_USER=${DB_USER}
             - MARIADB_PASSWORD=${DB_PASSWORD}
         volumes:
-            - ./bd_data:/var/lib/mysql/
-            #-> charge les migrations à la création de la db. /!\ au début de chaque fichier migr ajouter use mabase
+            # - ./bd_data:/var/lib/mysql/
+            # -> charge les migrations à la création de la db. /!\ au début de chaque fichier migr ajouter use mabase
             - ${PWD}/sql-docker:/docker-entrypoint-initdb.d 
