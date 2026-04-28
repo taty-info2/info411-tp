@@ -1,3 +1,7 @@
 tmp
 .env
 bd_data
+*.sh
+*.un
+dump_db.sql
+dump_db.zip
