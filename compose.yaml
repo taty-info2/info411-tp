@@ -3,6 +3,9 @@ name: info411
 services:
     srv-v3:
         container_name: server_info411
+        build:
+          context: .
+          dockerfile: Dockerfile
         # Je prefix avec docker.io parce que podman ne résout pas tout seul
         image: info411/server
         ports:
@@ -32,4 +35,4 @@ services:
         volumes:
             # - ./bd_data:/var/lib/mysql/
             # -> charge les migrations à la création de la db. /!\ au début de chaque fichier migr ajouter use mabase
-            - ${PWD}/sql-docker:/docker-entrypoint-initdb.d 
+            - ${PWD}/sql-docker:/docker-entrypoint-initdb.d
