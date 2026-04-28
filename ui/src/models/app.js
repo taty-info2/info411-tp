@@ -2,7 +2,7 @@
 import { Todos } from './todos.js';
 import { Observable, PubSub } from '../types.js';
 
-export const API_BASE_URL = "http://localhost:3001";
+export const API_BASE_URL = "https://https://toto.info411.site/todo";
 
 /**  
  * const static de App
